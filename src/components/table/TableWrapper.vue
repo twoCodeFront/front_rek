@@ -21,8 +21,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <TableFilter/>
   <div v-if="isTableVisible" class="w-full flex flex-col">
+    <TableFilter/>
     <table class="p-2 w-full bg-gray-100">
       <thead class="pb-2">
       <TableHeader/>
