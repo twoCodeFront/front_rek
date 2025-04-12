@@ -1,17 +1,17 @@
-import {reactive, ref} from "vue";
+import {type Reactive, reactive, ref} from "vue";
 import {defineStore} from 'pinia'
 import type {InvoiceInterface} from "../interfaces/invoice.interface.ts";
 import axios from 'axios';
 import type {Ref} from "vue";
-
+import type {TablePaginationInterface} from "../interfaces/tablePagination.interface.ts";
 
 const url = import.meta.env.VITE_URL;
 
 export const useInvoiceStore = defineStore('invoice', () => {
     const isLoading: Ref<boolean> = ref<boolean>(true);
     const isError: Ref<boolean> = ref<boolean>(false);
-    const invoicePagination = reactive({
-        data: [] as InvoiceInterface[],
+    const invoicePagination: Reactive<TablePaginationInterface<InvoiceInterface[]>> = reactive({
+        data: [],
         current_page: 1,
         per_page: 10,
         last_page: 1,
@@ -79,7 +79,7 @@ export const useInvoiceStore = defineStore('invoice', () => {
         } finally {
             isLoading.value = false;
         }
-    };
+    }
 
 
     return {

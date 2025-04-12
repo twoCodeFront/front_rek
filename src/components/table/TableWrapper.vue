@@ -5,6 +5,7 @@ import {storeToRefs} from "pinia";
 import TableHeader from "@/components/table/TableHeader.vue";
 import TableItemLoader from "@/components/table/TableItemLoader.vue";
 import TableFilter from "@/components/table/TableFilter.vue";
+import TablePagination from "@/components/table/TablePagination.vue";
 
 const TableItem = defineAsyncComponent(() => import('@/components/table/TableItem.vue'));
 const invoiceStore = useInvoiceStore();
@@ -49,30 +50,8 @@ onMounted(() => {
       </tr>
       </tbody>
     </table>
-    <div class="mt-4 flex justify-end gap-2" v-if="invoiceStore.invoicePagination.total">
-      <span class="mr-1 mt-1 text-gray-500">
-          łącznie: {{ invoiceStore.invoicePagination.total }}
-            <span>faktur</span>
-      </span>
-      <select v-model="invoiceStore.invoicePagination.per_page"
-              @change="invoiceStore.fetchFindAllInvoices(1)"
-              class="border rounded px-2 py-1">>
-        <option>2</option>
-        <option>10</option>
-        <option>20</option>
-      </select>
-      <button
-          v-for="page in invoicePagination.last_page"
-          :key="page"
-          @click="invoiceStore.fetchFindAllInvoices(page)"
-          :class="[
-          'px-3 py-1 rounded border',
-          page === invoicePagination.current_page ? 'bg-blue-500 text-white' : 'bg-white text-black'
-        ]"
-      >
-        {{ page }}
-      </button>
-    </div>
+    <TablePagination :fetchData="invoiceStore.fetchFindAllInvoices"
+                     :pagination="invoicePagination"/>
   </div>
   <div v-else-if="isLoaderVisible" class="flex flex-col items-center justify-center w-full h-full">
     <div>
