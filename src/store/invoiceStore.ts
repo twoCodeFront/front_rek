@@ -1,11 +1,10 @@
 import {type Reactive, reactive, ref} from "vue";
 import {defineStore} from 'pinia'
 import type {InvoiceInterface} from "../interfaces/invoice.interface.ts";
-import axios from 'axios';
+import axios from '../plugins/axios.ts';
 import type {Ref} from "vue";
 import type {TablePaginationInterface} from "../interfaces/tablePagination.interface.ts";
 
-const url = import.meta.env.VITE_URL;
 
 export const useInvoiceStore = defineStore('invoice', () => {
     const isLoading: Ref<boolean> = ref<boolean>(true);
@@ -20,7 +19,7 @@ export const useInvoiceStore = defineStore('invoice', () => {
 
     const fetchCreateInvoice = async (payload: InvoiceInterface): Promise<InvoiceInterface | undefined> => {
         try {
-            const response = await axios.post(url + 'invoices', payload);
+            const response = await axios.post('/invoices', payload);
             if (response.status === 201) {
                 await fetchFindAllInvoices(invoicePagination.current_page);
             }
@@ -33,7 +32,7 @@ export const useInvoiceStore = defineStore('invoice', () => {
 
     const fetchUpdateInvoice = async (payload: InvoiceInterface): Promise<InvoiceInterface | undefined> => {
         try {
-            const response = await axios.put(url + 'invoices/' + payload.id, payload);
+            const response = await axios.put('/invoices/' + payload.id, payload);
             if (response.status === 200) {
                 await fetchFindAllInvoices(invoicePagination.current_page);
             }
@@ -46,7 +45,7 @@ export const useInvoiceStore = defineStore('invoice', () => {
 
     const fetchDeleteInvoice = async (id: number): Promise<void> => {
         try {
-            await axios.delete(url + 'invoices/' + id);
+            await axios.delete('/invoices/' + id);
             await fetchFindAllInvoices(invoicePagination.current_page);
         } catch (error) {
             console.error('Nie udało się usunąć fkaktury', error);
@@ -58,7 +57,7 @@ export const useInvoiceStore = defineStore('invoice', () => {
         isError.value = false;
 
         try {
-            const response = await axios.get(url + 'invoices', {
+            const response = await axios.get('/invoices', {
                 params: {
                     page,
                     per_page: invoicePagination.per_page,
